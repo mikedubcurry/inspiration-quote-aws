@@ -1,0 +1,33 @@
+service: inspo
+
+provider:
+  name: aws
+  stage: dev
+  region: us-east-1
+  runtime: nodejs14.x
+
+functions:
+  getInspo:
+    handler: dist/inspo.handler
+    events:
+      - schedule: rate(1 day)
+    environment:
+      quoteQueueURL:
+        Ref: QuoteQueue
+  sendSMS:
+    handler: dist/sms.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - QuoteQueue
+              - Arn
+          batchSize: 1
+
+resources:
+  Resources:
+    QuoteQueue:
+      Type: 'AWS::SQS::Queue'
+      Properties:
+        QueueName: 'QuoteQueue-${self:provider.stage}'
+        VisibilityTimeout: 60
