@@ -1,3 +1,5 @@
+org: cryptofool13
+app: inspo-sms
 service: inspo
 
 provider:
@@ -10,7 +12,7 @@ functions:
   getInspo:
     handler: dist/inspo.handler
     events:
-      - schedule: rate(1 day)
+      - schedule: cron(30 16 * * ? *)
     environment:
       quoteQueueURL:
         Ref: QuoteQueue

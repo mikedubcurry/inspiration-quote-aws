@@ -3,7 +3,7 @@ import { APIGatewayEvent, ScheduledEvent } from 'aws-lambda';
 
 import { sendSQSMessage } from './uitls';
 
-export const handler = async (event: APIGatewayEvent) => {
+export const handler = async (event: ScheduledEvent) => {
 	try {
 		const [quoteRes] = (await httprequest()) as QuoteResponse;
 
